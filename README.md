@@ -1,6 +1,6 @@
 # 🚀 Statsview
 
-[**Statsview**](https://github.com/go-echarts/viewstats) is a real-time Golang runtime stats visualization profiler. It is built top on another open-source poject, [go-echarts](https://github.com/go-echarts/go-echarts), which helps statsview to show its graphs on the browser.
+Statsview is a real-time Golang runtime stats visualization profiler. It is built top on another open-source project, [go-echarts](https://github.com/go-echarts/go-echarts), which helps statsview to show its graphs on the browser.
 
 ## Installation
 
@@ -67,7 +67,6 @@ WithTimeFormat(s string)
 //
 // Optional:
 // * ThemeWesteros
-// * ThemeWalden
 // * ThemeMacarons
 WithTheme(theme Theme)
 ```
