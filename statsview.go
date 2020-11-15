@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/go-echarts/go-echarts/components"
-	"github.com/go-echarts/go-echarts/templates"
+	"github.com/go-echarts/go-echarts/v2/components"
+	"github.com/go-echarts/go-echarts/v2/templates"
 	"github.com/rs/cors"
 
 	"github.com/go-echarts/statsview/statics"
