@@ -2,6 +2,16 @@
 
 Statsview is a real-time Golang runtime stats visualization profiler. It is built top on another open-source project, [go-echarts](https://github.com/go-echarts/go-echarts), which helps statsview to show its graphs on the browser.
 
+<a href="https://github.com/go-echarts/statsview/pulls">
+    <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="Contributions welcome">
+</a>
+<a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg" alt="MIT License">
+</a>
+<a href="https://pkg.go.dev/github.com/go-echarts/statsview">
+    <img src="https://godoc.org/github.com/go-echarts/statsview?status.svg" alt="GoDoc">
+ </a>
+
 ## Installation
 
 ```shell
@@ -10,7 +20,7 @@ $ go get -u github.com/go-echarts/statsview/...
 
 ## Usage
 
-Statsview is quite simple to use.
+Statsview is quite simple to use. All static assets have been packaged into the project thus it can be ran on any environment.
 
 ```golang
 import (
