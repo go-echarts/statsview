@@ -39,7 +39,7 @@ func main() {
 
 ## Configuration
 
-Statsview gets a variety of configurations for the users. Everyone could customzie thier favorite charts style.
+Statsview gets a variety of configurations for the users. Everyone could customize their favorite charts style.
 
 ```golang
 // WithInterval sets the interval(in millisecond) of collecting and pulling metrics
@@ -94,7 +94,7 @@ Viewer is the abstraction of a Graph which in charge of collecting metrics from 
 * `HeapViewer`
 * `StackViewer`
 
-Viewer wraps a go-echarts [Line instance](https://github.com/go-echarts/go-echarts/blob/master/charts/line.go) that means you can use all of the options/features on it. To be honest, I think that is the most charming thing of this project.
+Viewer wraps a go-echarts [Line instance](https://github.com/go-echarts/go-echarts/blob/master/charts/line.go) that means you can use all the options/features on it. To be honest, I think that is the most charming thing about this project.
 
 ## Snapshot
 
