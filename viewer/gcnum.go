@@ -9,14 +9,17 @@ import (
 )
 
 const (
+	// VGCNum is the name of GCNumViewer
 	VGCNum = "gcnum"
 )
 
-// GCNumViewer collects the GC number metric from `runtime.ReadMemStats()`
+// GCNumViewer collects the GC number metric via `runtime.ReadMemStats()`
 type GCNumViewer struct {
 	graph *charts.Line
 }
 
+// NewGCNumViewer returns the GCNumViewer instance
+// Series: GcNum
 func NewGCNumViewer() Viewer {
 	graph := newBasicView(VGCNum)
 	graph.SetGlobalOptions(

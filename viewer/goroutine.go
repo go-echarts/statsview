@@ -11,14 +11,17 @@ import (
 )
 
 const (
+	// VGoroutine is the name of GoroutinesViewer
 	VGoroutine = "goroutine"
 )
 
-// GoroutinesViewer collects the goroutine number metric from `runtime.NumGoroutine()`
+// GoroutinesViewer collects the goroutine number metric via `runtime.NumGoroutine()`
 type GoroutinesViewer struct {
 	graph *charts.Line
 }
 
+// NewGoroutinesViewer returns the GoroutinesViewer instance
+// Series: Goroutines
 func NewGoroutinesViewer() Viewer {
 	graph := newBasicView(VGoroutine)
 	graph.SetGlobalOptions(

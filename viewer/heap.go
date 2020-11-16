@@ -9,15 +9,17 @@ import (
 )
 
 const (
+	// VHeap is the name of HeapViewer
 	VHeap = "heap"
 )
 
-// HeapViewer collects the heap-stats metrics from `runtime.ReadMemStats()`
-// including `HeapAlloc` / `HeapInuse` / `HeapSys` / `HeapIdle`
+// HeapViewer collects the heap-stats metrics via `runtime.ReadMemStats()`
 type HeapViewer struct {
 	graph *charts.Line
 }
 
+// NewHeapViewer returns the HeapViewer instance
+// Series: Alloc / Inuse / Sys / Idle
 func NewHeapViewer() Viewer {
 	graph := newBasicView(VHeap)
 	graph.SetGlobalOptions(

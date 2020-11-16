@@ -9,14 +9,17 @@ import (
 )
 
 const (
+	// VGCSzie is the name of GCSizeViewer
 	VGCSzie = "gcsize"
 )
 
-// GCSizeViewer collects the GC size metric from `runtime.ReadMemStats()`
+// GCSizeViewer collects the GC size metric via `runtime.ReadMemStats()`
 type GCSizeViewer struct {
 	graph *charts.Line
 }
 
+// NewGCSizeViewer returns the GCSizeViewer instance
+// Series: GCSys / NextGC
 func NewGCSizeViewer() Viewer {
 	graph := newBasicView(VGCSzie)
 	graph.SetGlobalOptions(

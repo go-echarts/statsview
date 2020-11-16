@@ -5,6 +5,9 @@ Statsview is a real-time Golang runtime stats visualization profiler. It is buil
 <a href="https://github.com/go-echarts/statsview/pulls">
     <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="Contributions welcome">
 </a>
+<a href="https://goreportcard.com/report/github.com/go-echarts/statsview">
+    <img src="https://goreportcard.com/badge/github.com/go-echarts/statsview" alt="Go Report Card">
+</a>
 <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg" alt="MIT License">
 </a>
@@ -12,15 +15,15 @@ Statsview is a real-time Golang runtime stats visualization profiler. It is buil
     <img src="https://godoc.org/github.com/go-echarts/statsview?status.svg" alt="GoDoc">
  </a>
 
-## Installation
+## 🔰 Installation
 
 ```shell
 $ go get -u github.com/go-echarts/statsview/...
 ```
 
-## Usage
+## 📝 Usage
 
-Statsview is quite simple to use. All static assets have been packaged into the project thus it can be ran on any environment.
+Statsview is quite simple to use. All static assets have been packaged into the project thus it can be ran offline.
 
 ```golang
 import (
@@ -47,7 +50,7 @@ func main() {
 // Visit your browser at http://localhost:18066/statsview/debug
 ```
 
-## Configuration
+## ⚙️ Configuration
 
 Statsview gets a variety of configurations for the users. Everyone could customize their favorite charts style.
 
@@ -92,7 +95,7 @@ import (
 viewer.SetConfiguration(viewer.WithTheme(viewer.ThemeWalden), view.WithAddr("localhost:8087"))
 ```
 
-## Viewers
+## 🗂 Viewers
 
 Viewer is the abstraction of a Graph which in charge of collecting metrics from somewhere. Statsview provides some default viewers as below.
 
@@ -105,7 +108,7 @@ Viewer is the abstraction of a Graph which in charge of collecting metrics from 
 
 Viewer wraps a go-echarts [Line instance](https://github.com/go-echarts/go-echarts/blob/master/charts/line.go) that means you can use all the options/features on it. To be honest, I think that is the most charming thing about this project.
 
-## Snapshot
+## 🔖 Snapshot
 
 #### ThemeMacarons
 
@@ -116,6 +119,6 @@ Viewer wraps a go-echarts [Line instance](https://github.com/go-echarts/go-echar
 ![Westeros](https://user-images.githubusercontent.com/19553554/99193211-78d7c280-27b2-11eb-96c8-cbcb6792e68a.png)
 
 
-## License
+## 📄 License
 
 MIT [©chenjiandongx](https://github.com/chenjiandongx)

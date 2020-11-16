@@ -9,15 +9,17 @@ import (
 )
 
 const (
+	// VCStack is the name of StackViewer
 	VCStack = "stack"
 )
 
-// StackViewer collects the stack-stats metrics from `runtime.ReadMemStats()`
-// including `StackSys` / `StackInuse` / `MSpanSys` / `MSpanInuse`
+// StackViewer collects the stack-stats metrics via `runtime.ReadMemStats()`
 type StackViewer struct {
 	graph *charts.Line
 }
 
+// NewStackViewer returns the StackViewer instance
+// Series: StackSys / StackInuse / MSpanSys / MSpanInuse
 func NewStackViewer() Viewer {
 	graph := newBasicView(VCStack)
 	graph.SetGlobalOptions(

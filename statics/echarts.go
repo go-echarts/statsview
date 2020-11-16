@@ -1,6 +1,7 @@
 package statics
 
-var EchartJS = `
+// EchartJS is the echarts.min.js asset
+const EchartJS = `
 
 /*
 * Licensed to the Apache Software Foundation (ASF) under one

@@ -9,14 +9,17 @@ import (
 )
 
 const (
+	// VGCCPUFraction is the name of GCCPUFractionViewer
 	VGCCPUFraction = "gccpufraction"
 )
 
-// GCCPUFractionViewer collects the GC-CPU fraction metric from `runtime.ReadMemStats()`
+// GCCPUFractionViewer collects the GC-CPU fraction metric via `runtime.ReadMemStats()`
 type GCCPUFractionViewer struct {
 	graph *charts.Line
 }
 
+// NewGCCPUFractionViewer returns the GCCPUFractionViewer instance
+// Series: Fraction
 func NewGCCPUFractionViewer() Viewer {
 	graph := newBasicView(VGCCPUFraction)
 	graph.SetGlobalOptions(
