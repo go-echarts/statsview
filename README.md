@@ -23,7 +23,9 @@ $ go get -u github.com/go-echarts/statsview/...
 
 ## 📝 Usage
 
-Statsview is quite simple to use. All static assets have been packaged into the project thus it can be ran offline. It's worth pointing out that statsview has integrated the default profiler hence you don't need to import `_ net/http/pprof` separately.
+Statsview is quite simple to use. All static assets have been packaged into the project which makes it possible to run offline.
+
+It's worth pointing out that statsview has integrated the std-profiler hence you don't need to import `_ net/http/pprof` separately.
 
 ```golang
 import (
@@ -107,7 +109,7 @@ Viewer is the abstraction of a Graph which in charge of collecting metrics from 
 * `HeapViewer`
 * `StackViewer`
 
-Viewer wraps a go-echarts [Line instance](https://github.com/go-echarts/go-echarts/blob/master/charts/line.go) that means you can use all options/features on it. To be honest, I think that is the most charming thing about this project.
+Viewer wraps a go-echarts [*charts.Line](https://github.com/go-echarts/go-echarts/blob/master/charts/line.go) instance that means all options/features on it could be used. To be honest, I think that is the most charming thing about this project.
 
 ## 🔖 Snapshot
 
