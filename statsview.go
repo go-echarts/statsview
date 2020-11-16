@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/http/pprof"
 	"time"
 
 	"github.com/go-echarts/go-echarts/v2/components"
@@ -75,7 +76,7 @@ func init() {
 // New creates a new ViewManager instance
 func New() *ViewManager {
 	page := components.NewPage()
-	page.AssetsHost = fmt.Sprintf("http://%s/statsview/statics/", viewer.Addr())
+	page.AssetsHost = fmt.Sprintf("http://%s/debug/statsview/statics/", viewer.Addr())
 	page.Assets.JSAssets.Add("jquery.min.js")
 
 	mgr := &ViewManager{
@@ -98,16 +99,22 @@ func New() *ViewManager {
 	)
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("/debug/pprof/", pprof.Index)
+	mux.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	mux.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
+
 	for _, v := range mgr.Views {
 		page.AddCharts(v.View())
-		mux.HandleFunc("/"+v.Name(), v.Serve)
+		mux.HandleFunc("/debug/statsview/view/"+v.Name(), v.Serve)
 	}
 
-	mux.HandleFunc("/statsview/debug", func(w http.ResponseWriter, _ *http.Request) {
+	mux.HandleFunc("/debug/statsview", func(w http.ResponseWriter, _ *http.Request) {
 		page.Render(w)
 	})
 
-	staticsPrev := "/statsview/statics/"
+	staticsPrev := "/debug/statsview/statics/"
 	mux.HandleFunc(staticsPrev+"echarts.min.js", func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte(statics.EchartJS))
 	})

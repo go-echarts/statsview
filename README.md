@@ -23,7 +23,7 @@ $ go get -u github.com/go-echarts/statsview/...
 
 ## 📝 Usage
 
-Statsview is quite simple to use. All static assets have been packaged into the project thus it can be ran offline.
+Statsview is quite simple to use. All static assets have been packaged into the project thus it can be ran offline. It's worth pointing out that statsview has integrated the default profiler hence you don't need to import `_ net/http/pprof` separately.
 
 ```golang
 import (
@@ -47,7 +47,8 @@ func main() {
     time.Sleep(time.Minute)
 }
 
-// Visit your browser at http://localhost:18066/statsview/debug
+// Visit your browser at http://localhost:18066/debug/statsview
+// Or debug as always via http://localhost:18066/debug/pprof, http://localhost:18066/debug/pprof/heap, ...
 ```
 
 ## ⚙️ Configuration
@@ -106,17 +107,17 @@ Viewer is the abstraction of a Graph which in charge of collecting metrics from 
 * `HeapViewer`
 * `StackViewer`
 
-Viewer wraps a go-echarts [Line instance](https://github.com/go-echarts/go-echarts/blob/master/charts/line.go) that means you can use all the options/features on it. To be honest, I think that is the most charming thing about this project.
+Viewer wraps a go-echarts [Line instance](https://github.com/go-echarts/go-echarts/blob/master/charts/line.go) that means you can use all options/features on it. To be honest, I think that is the most charming thing about this project.
 
 ## 🔖 Snapshot
 
 #### ThemeMacarons
 
-![Macarons](https://user-images.githubusercontent.com/19553554/99192859-45943400-27b0-11eb-8096-8a9e76fba3a1.png)
+![Macarons](https://user-images.githubusercontent.com/19553554/99277747-21485e00-2869-11eb-9b67-d10bbec008d5.png)
 
 #### ThemeWesteros
 
-![Westeros](https://user-images.githubusercontent.com/19553554/99193211-78d7c280-27b2-11eb-96c8-cbcb6792e68a.png)
+![Westeros](https://user-images.githubusercontent.com/19553554/99277886-59e83780-2869-11eb-93b8-5b7324ecfd46.png)
 
 
 ## 📄 License

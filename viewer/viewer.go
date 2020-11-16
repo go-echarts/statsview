@@ -40,7 +40,7 @@ $(function () { setInterval({{ .ViewID }}_sync, {{ .Interval }}); });
 function {{ .ViewID }}_sync() {
     $.ajax({
         type: "GET",
-        url: "http://{{ .Addr }}/{{ .Route }}",
+        url: "http://{{ .Addr }}/debug/statsview/view/{{ .Route }}",
         dataType: "json",
         success: function (result) {
             let opt = goecharts_{{ .ViewID }}.getOption();
@@ -83,10 +83,12 @@ var defaultCfg = &config{
 
 type Option func(c *config)
 
+// Addr returns the default server listening address
 func Addr() string {
 	return defaultCfg.Addr
 }
 
+// Interval returns the default collecting interval of ViewManager
 func Interval() int {
 	return defaultCfg.Interval
 }
@@ -113,7 +115,7 @@ func WithTemplate(t string) Option {
 	}
 }
 
-// WithAddr sets the listen address
+// WithAddr sets the listening address
 func WithAddr(addr string) Option {
 	return func(c *config) {
 		c.Addr = addr
@@ -140,6 +142,7 @@ func SetConfiguration(opts ...Option) {
 	}
 }
 
+// Viewer is the abstraction of a Graph which in charge of collecting metrics from somewhere
 type Viewer interface {
 	Name() string
 	View() *charts.Line
