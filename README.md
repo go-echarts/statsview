@@ -33,7 +33,7 @@ func main() {
     go func() {
         mgr := statsview.New()
 
-        // Start() runs a HTTP server at `localhost:10866` by default.
+        // Start() runs a HTTP server at `localhost:18066` by default.
         mgr.Start()
 
         // Stop() will shutdown the http server gracefully
@@ -44,7 +44,7 @@ func main() {
     time.Sleep(time.Minute)
 }
 
-// Visit your browser at http://localhost:10866/statsview/debug
+// Visit your browser at http://localhost:18066/statsview/debug
 ```
 
 ## Configuration
