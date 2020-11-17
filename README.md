@@ -23,9 +23,7 @@ $ go get -u github.com/go-echarts/statsview/...
 
 ## 📝 Usage
 
-Statsview is quite simple to use. All static assets have been packaged into the project which makes it possible to run offline.
-
-It's worth pointing out that statsview has integrated the std-profiler hence you don't need to import `_ net/http/pprof` separately.
+Statsview is quite simple to use and all static assets have been packaged into the project which makes it possible to run offline. It's worth pointing out that statsview has integrated the standard `net/http/pprof` hence statsview will be the only profiler you need.
 
 ```golang
 import (
@@ -113,7 +111,7 @@ Viewer wraps a go-echarts [*charts.Line](https://github.com/go-echarts/go-echart
 
 ## 🔖 Snapshot
 
-#### ThemeMacarons
+#### ThemeMacarons(default)
 
 ![Macarons](https://user-images.githubusercontent.com/19553554/99277747-21485e00-2869-11eb-9b67-d10bbec008d5.png)
 
