@@ -2,8 +2,10 @@ package viewer
 
 import (
 	"bytes"
+	"fmt"
 	"net/http"
 	"runtime"
+	"strconv"
 	"text/template"
 	"time"
 
@@ -65,9 +67,9 @@ function {{ .ViewID }}_sync() {
         }
     });
 }`
-	DefaultMaxPoints  = 40
+	DefaultMaxPoints  = 30
 	DefaultTimeFormat = "15:04:05"
-	DefaultInterval   = 1500
+	DefaultInterval   = 2000
 	DefaultAddr       = "localhost:18066"
 	DefaultTheme      = ThemeMacarons
 )
@@ -189,11 +191,22 @@ func genViewTemplate(vid, route string) string {
 	return buf.String()
 }
 
+func fixedPrecision(n float64, p int) float64 {
+	var r float64
+	switch p {
+	case 2:
+		r, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", n), 64)
+	case 6:
+		r, _ = strconv.ParseFloat(fmt.Sprintf("%.6f", n), 64)
+	}
+	return r
+}
+
 func newBasicView(route string) *charts.Line {
 	graph := charts.NewLine()
 	graph.SetGlobalOptions(
 		charts.WithLegendOpts(opts.Legend{Show: true}),
-		charts.WithTooltipOpts(opts.Tooltip{Show: true}),
+		charts.WithTooltipOpts(opts.Tooltip{Show: true, Trigger: "axis"}),
 		charts.WithXAxisOpts(opts.XAxis{Name: "Time"}),
 		charts.WithInitializationOpts(opts.Initialization{
 			Width:  "600px",

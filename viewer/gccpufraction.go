@@ -24,7 +24,7 @@ func NewGCCPUFractionViewer() Viewer {
 	graph := newBasicView(VGCCPUFraction)
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "GC CPUFraction"}),
-		charts.WithYAxisOpts(opts.YAxis{Name: "Percent", AxisLabel: &opts.AxisLabel{Formatter: "{value} %", Rotate: 30}}),
+		charts.WithYAxisOpts(opts.YAxis{Name: "Percent", AxisLabel: &opts.AxisLabel{Formatter: "{value} %", Rotate: 35}}),
 	)
 	graph.AddSeries("Fraction", []opts.LineData{})
 
@@ -41,7 +41,7 @@ func (vr *GCCPUFractionViewer) View() *charts.Line {
 
 func (vr *GCCPUFractionViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	metrics := Metrics{
-		Values: []float64{rtStats.Stats.GCCPUFraction},
+		Values: []float64{fixedPrecision(rtStats.Stats.GCCPUFraction, 6)},
 		Time:   rtStats.T,
 	}
 

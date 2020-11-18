@@ -43,8 +43,8 @@ func (vr *GCSizeViewer) View() *charts.Line {
 func (vr *GCSizeViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	metrics := Metrics{
 		Values: []float64{
-			float64(rtStats.Stats.GCSys) / 1024 / 1024,
-			float64(rtStats.Stats.NextGC) / 1024 / 1024,
+			fixedPrecision(float64(rtStats.Stats.GCSys)/1024/1024, 2),
+			fixedPrecision(float64(rtStats.Stats.NextGC)/1024/1024, 2),
 		},
 		Time: rtStats.T,
 	}

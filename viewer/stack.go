@@ -45,10 +45,10 @@ func (vr *StackViewer) View() *charts.Line {
 func (vr *StackViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	metrics := Metrics{
 		Values: []float64{
-			float64(rtStats.Stats.StackSys) / 1024 / 1024,
-			float64(rtStats.Stats.StackInuse) / 1024 / 1024,
-			float64(rtStats.Stats.MSpanSys) / 1024 / 1024,
-			float64(rtStats.Stats.MSpanInuse) / 1024 / 1024,
+			fixedPrecision(float64(rtStats.Stats.StackSys)/1024/1024, 2),
+			fixedPrecision(float64(rtStats.Stats.StackInuse)/1024/1024, 2),
+			fixedPrecision(float64(rtStats.Stats.MSpanSys)/1024/1024, 2),
+			fixedPrecision(float64(rtStats.Stats.MSpanInuse)/1024/1024, 2),
 		},
 		Time: rtStats.T,
 	}

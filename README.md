@@ -56,12 +56,12 @@ func main() {
 Statsview gets a variety of configurations for the users. Everyone could customize their favorite charts style.
 
 ```golang
-// WithInterval sets the interval(in millisecond) of collecting and pulling metrics
-// default -> 1500
+// WithInterval sets the interval(in Millisecond) of collecting and pulling metrics
+// default -> 2000
 WithInterval(interval int)
 
 // WithMaxPoints sets the maximum points of each chart series
-// default -> 40
+// default -> 30
 WithMaxPoints(n int)
 
 // WithTemplate sets the rendered template which fetching stats from the server and
@@ -113,12 +113,11 @@ Viewer wraps a go-echarts [*charts.Line](https://github.com/go-echarts/go-echart
 
 #### ThemeMacarons(default)
 
-![Macarons](https://user-images.githubusercontent.com/19553554/99277747-21485e00-2869-11eb-9b67-d10bbec008d5.png)
+![Macarons](https://user-images.githubusercontent.com/19553554/99491359-92d9f680-29a6-11eb-99c8-bc333cb90893.png)
 
 #### ThemeWesteros
 
-![Westeros](https://user-images.githubusercontent.com/19553554/99277886-59e83780-2869-11eb-93b8-5b7324ecfd46.png)
-
+![Westeros](https://user-images.githubusercontent.com/19553554/99491179-42629900-29a6-11eb-852b-694662fcd3aa.png)
 
 ## 📄 License
 

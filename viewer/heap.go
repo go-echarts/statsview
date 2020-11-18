@@ -45,10 +45,10 @@ func (vr *HeapViewer) View() *charts.Line {
 func (vr *HeapViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	metrics := Metrics{
 		Values: []float64{
-			float64(rtStats.Stats.HeapAlloc) / 1024 / 1024,
-			float64(rtStats.Stats.HeapInuse) / 1024 / 1024,
-			float64(rtStats.Stats.HeapSys) / 1024 / 1024,
-			float64(rtStats.Stats.HeapIdle) / 1024 / 1024,
+			fixedPrecision(float64(rtStats.Stats.HeapAlloc)/1024/1024, 2),
+			fixedPrecision(float64(rtStats.Stats.HeapInuse)/1024/1024, 2),
+			fixedPrecision(float64(rtStats.Stats.HeapSys)/1024/1024, 2),
+			fixedPrecision(float64(rtStats.Stats.HeapIdle)/1024/1024, 2),
 		},
 		Time: rtStats.T,
 	}
