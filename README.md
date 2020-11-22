@@ -93,7 +93,7 @@ import (
 )
 
 // set configurations before calling the `Start()` method
-viewer.SetConfiguration(viewer.WithTheme(viewer.ThemeWalden), view.WithAddr("localhost:8087"))
+viewer.SetConfiguration(viewer.WithTheme(viewer.ThemeWalden), viewer.WithAddr("localhost:8087"))
 ```
 
 ## 🗂 Viewers
