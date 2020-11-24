@@ -93,12 +93,12 @@ import (
 )
 
 // set configurations before calling the `Start()` method
-viewer.SetConfiguration(viewer.WithTheme(viewer.ThemeWalden), viewer.WithAddr("localhost:8087"))
+viewer.SetConfiguration(viewer.WithTheme(viewer.ThemeWesteros), viewer.WithAddr("localhost:8087"))
 ```
 
 ## 🗂 Viewers
 
-Viewer is the abstraction of a Graph which in charge of collecting metrics from somewhere. Statsview provides some default viewers as below.
+Viewer is the abstraction of a Graph which in charge of collecting metrics from Runtime. Statsview provides some default viewers as below.
 
 * `GCCPUFractionViewer`
 * `GCNumViewer`
