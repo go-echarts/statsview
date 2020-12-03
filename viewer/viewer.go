@@ -24,7 +24,8 @@ type config struct {
 	Interval   int
 	MaxPoints  int
 	Template   string
-	Addr       string
+	ListenAddr string
+	LinkAddr   string
 	TimeFormat string
 	Theme      Theme
 }
@@ -78,7 +79,8 @@ var defaultCfg = &config{
 	Interval:   DefaultInterval,
 	MaxPoints:  DefaultMaxPoints,
 	Template:   DefaultTemplate,
-	Addr:       DefaultAddr,
+	ListenAddr: DefaultAddr,
+	LinkAddr:   DefaultAddr,
 	TimeFormat: DefaultTimeFormat,
 	Theme:      DefaultTheme,
 }
@@ -87,7 +89,12 @@ type Option func(c *config)
 
 // Addr returns the default server listening address
 func Addr() string {
-	return defaultCfg.Addr
+	return defaultCfg.ListenAddr
+}
+
+// LinkAddr returns the default html link address
+func LinkAddr() string {
+	return defaultCfg.LinkAddr
 }
 
 // Interval returns the default collecting interval of ViewManager
@@ -117,10 +124,18 @@ func WithTemplate(t string) Option {
 	}
 }
 
-// WithAddr sets the listening address
+// WithAddr sets the listening address and link address
 func WithAddr(addr string) Option {
 	return func(c *config) {
-		c.Addr = addr
+		c.ListenAddr = addr
+		c.LinkAddr = addr
+	}
+}
+
+// WithLinkAddr sets the html link address
+func WithLinkAddr(addr string) Option {
+	return func(c *config) {
+		c.LinkAddr = addr
 	}
 }
 
@@ -178,7 +193,7 @@ func genViewTemplate(vid, route string) string {
 	}{
 		Interval:  defaultCfg.Interval,
 		MaxPoints: defaultCfg.MaxPoints,
-		Addr:      defaultCfg.Addr,
+		Addr:      defaultCfg.LinkAddr,
 		Route:     route,
 		ViewID:    vid,
 	}
