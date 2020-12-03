@@ -68,9 +68,13 @@ WithMaxPoints(n int)
 // handling the metrics data
 WithTemplate(t string)
 
-// WithAddr sets the listen address
+// WithAddr sets the listening address and link address
 // default -> "localhost:18066"
 WithAddr(addr string)
+
+// WithLinkAddr sets the html link address
+// default -> "localhost:18066"
+WithLinkAddr(addr string)
 
 // WithTimeFormat sets the time format for the line-chart Y-axis label
 // default -> "15:04:05"
