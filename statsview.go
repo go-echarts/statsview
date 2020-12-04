@@ -132,6 +132,6 @@ func New() *ViewManager {
 		w.Write([]byte(statics.MacaronsJS))
 	})
 
-	mgr.srv.Handler = cors.Default().Handler(mux)
+	mgr.srv.Handler = cors.AllowAll().Handler(mux)
 	return mgr
 }
