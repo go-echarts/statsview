@@ -41,7 +41,6 @@ func (vm *ViewManager) Start() {
 		case <-ticker.C:
 			viewer.StartRTCollect()
 		case <-vm.done:
-			vm.Stop()
 			ticker.Stop()
 			return
 		}
