@@ -49,11 +49,11 @@ func (vm *ViewManager) Start() {
 
 // Stop shutdown the http server gracefully
 func (vm *ViewManager) Stop() {
-	vm.done <- struct{}{}
-
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	vm.srv.Shutdown(ctx)
+	//stop the starter goroutine
+	vm.done <- struct{}{}
 }
 
 func init() {
