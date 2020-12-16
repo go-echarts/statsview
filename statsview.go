@@ -15,21 +15,27 @@ import (
 	"github.com/go-echarts/statsview/viewer"
 )
 
-// ViewManager
-type ViewManager struct {
-	Views []viewer.Viewer
+type ViewManager interface {
+	Register(views ...viewer.Viewer)
+	Start()
+	Stop() error
+}
+
+// viewManager
+type viewManager struct {
+	views []viewer.Viewer
 
 	srv  *http.Server
 	done chan struct{}
 }
 
-// Register registers views to the ViweManager
-func (vm *ViewManager) Register(views ...viewer.Viewer) {
-	vm.Views = append(vm.Views, views...)
+// Register registers views to the viewManager
+func (vm *viewManager) Register(views ...viewer.Viewer) {
+	vm.views = append(vm.views, views...)
 }
 
 // Start runs a http server and begin to collect metrics
-func (vm *ViewManager) Start() {
+func (vm *viewManager) Start() {
 	ticker := time.NewTicker(time.Duration(viewer.Interval()) * time.Millisecond)
 
 	go func() {
@@ -49,12 +55,12 @@ func (vm *ViewManager) Start() {
 }
 
 // Stop shutdown the http server gracefully
-func (vm *ViewManager) Stop() {
+func (vm *viewManager) Stop() error {
 	vm.done <- struct{}{}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	vm.srv.Shutdown(ctx)
+	return vm.srv.Shutdown(ctx)
 }
 
 func init() {
@@ -74,13 +80,13 @@ func init() {
 }
 
 // New creates a new ViewManager instance
-func New() *ViewManager {
+func New() ViewManager {
 	page := components.NewPage()
 	page.PageTitle = "Statsview"
 	page.AssetsHost = fmt.Sprintf("http://%s/debug/statsview/statics/", viewer.LinkAddr())
 	page.Assets.JSAssets.Add("jquery.min.js")
 
-	mgr := &ViewManager{
+	mgr := &viewManager{
 		done: make(chan struct{}),
 		srv: &http.Server{
 			Addr:           viewer.Addr(),
@@ -106,7 +112,7 @@ func New() *ViewManager {
 	mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
 	mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 
-	for _, v := range mgr.Views {
+	for _, v := range mgr.views {
 		page.AddCharts(v.View())
 		mux.HandleFunc("/debug/statsview/view/"+v.Name(), v.Serve)
 	}
