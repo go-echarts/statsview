@@ -17,7 +17,7 @@ const (
 
 // GoroutinesViewer collects the goroutine number metric via `runtime.NumGoroutine()`
 type GoroutinesViewer struct {
-	smgr *StatsMgr
+	smgr  *StatsMgr
 	graph *charts.Line
 }
 
@@ -48,6 +48,7 @@ func (vr *GoroutinesViewer) View() *charts.Line {
 
 func (vr *GoroutinesViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	vr.smgr.Tick()
+
 	metrics := Metrics{
 		Values: []float64{float64(runtime.NumGoroutine())},
 		Time:   time.Now().Format(defaultCfg.TimeFormat),

@@ -48,7 +48,6 @@ func (vr *StackViewer) View() *charts.Line {
 }
 
 func (vr *StackViewer) Serve(w http.ResponseWriter, _ *http.Request) {
-
 	vr.smgr.Tick()
 
 	metrics := Metrics{

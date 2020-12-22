@@ -176,14 +176,14 @@ type statsEntity struct {
 var memstats = &statsEntity{Stats: &runtime.MemStats{}}
 
 type StatsMgr struct {
-	last int64
+	last   int64
 	Ctx    context.Context
 	Cancel context.CancelFunc
 }
 
 func NewStatsMgr(ctx context.Context) *StatsMgr {
 	s := &StatsMgr{}
-	s.Ctx,s.Cancel = context.WithCancel(ctx)
+	s.Ctx, s.Cancel = context.WithCancel(ctx)
 	go s.polling()
 
 	return s
@@ -209,7 +209,6 @@ func (s *StatsMgr) polling() {
 		}
 	}
 }
-
 
 func genViewTemplate(vid, route string) string {
 	tpl, err := template.New("view").Parse(defaultCfg.Template)

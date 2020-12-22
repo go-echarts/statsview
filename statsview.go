@@ -18,10 +18,11 @@ import (
 // ViewManager
 type ViewManager struct {
 	srv *http.Server
-	Smgr *viewer.StatsMgr
+
+	Smgr   *viewer.StatsMgr
 	Ctx    context.Context
 	Cancel context.CancelFunc
-	Views []viewer.Viewer
+	Views  []viewer.Viewer
 }
 
 // Register registers views to the ViewManager
@@ -37,7 +38,7 @@ func (vm *ViewManager) Start() error {
 
 // Stop shutdown the http server gracefully
 func (vm *ViewManager) Stop() {
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	vm.srv.Shutdown(ctx)
 	vm.Cancel()
@@ -73,7 +74,6 @@ func New() *ViewManager {
 			WriteTimeout:   time.Minute,
 			MaxHeaderBytes: 1 << 20,
 		},
-
 	}
 	mgr.Ctx, mgr.Cancel = context.WithCancel(context.Background())
 	mgr.Register(
@@ -85,7 +85,7 @@ func New() *ViewManager {
 		viewer.NewGCCPUFractionViewer(),
 	)
 	smgr := viewer.NewStatsMgr(mgr.Ctx)
-	for _,v := range mgr.Views{
+	for _, v := range mgr.Views {
 		v.SetStatsMgr(smgr)
 	}
 
@@ -125,4 +125,3 @@ func New() *ViewManager {
 	mgr.srv.Handler = cors.AllowAll().Handler(mux)
 	return mgr
 }
-

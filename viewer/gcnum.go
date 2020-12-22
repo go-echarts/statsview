@@ -15,7 +15,7 @@ const (
 
 // GCNumViewer collects the GC number metric via `runtime.ReadMemStats()`
 type GCNumViewer struct {
-	smgr *StatsMgr
+	smgr  *StatsMgr
 	graph *charts.Line
 }
 
@@ -46,6 +46,7 @@ func (vr *GCNumViewer) View() *charts.Line {
 
 func (vr *GCNumViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	vr.smgr.Tick()
+
 	metrics := Metrics{
 		Values: []float64{float64(memstats.Stats.NumGC)},
 		Time:   memstats.T,
