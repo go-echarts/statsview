@@ -23,33 +23,19 @@ type ViewManager struct {
 	done chan struct{}
 }
 
-// Register registers views to the ViweManager
+// Register registers views to the ViewManager
 func (vm *ViewManager) Register(views ...viewer.Viewer) {
 	vm.Views = append(vm.Views, views...)
 }
 
 // Start runs a http server and begin to collect metrics
-func (vm *ViewManager) Start() {
-	ticker := time.NewTicker(time.Duration(viewer.Interval()) * time.Millisecond)
-
-	go func() {
-		vm.srv.ListenAndServe()
-	}()
-
-	for {
-		select {
-		case <-ticker.C:
-			viewer.StartRTCollect()
-		case <-vm.done:
-			ticker.Stop()
-			return
-		}
-	}
+func (vm *ViewManager) Start() error {
+	return vm.srv.ListenAndServe()
 }
 
 // Stop shutdown the http server gracefully
 func (vm *ViewManager) Stop() {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 	vm.srv.Shutdown(ctx)
 	//stop the starter goroutine

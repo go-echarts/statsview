@@ -167,16 +167,38 @@ type Viewer interface {
 }
 
 type statsEntity struct {
-	T     string
 	Stats *runtime.MemStats
+	T     string
 }
 
-var rtStats = &statsEntity{Stats: &runtime.MemStats{}}
+var memstats = &statsEntity{Stats: &runtime.MemStats{}}
 
-func StartRTCollect() {
-	runtime.ReadMemStats(rtStats.Stats)
-	rtStats.T = time.Now().Format(defaultCfg.TimeFormat)
+type statsMgr struct {
+	last int64
 }
+
+func newStatsMgr() *statsMgr {
+	s := &statsMgr{}
+	go s.polling()
+
+	return s
+}
+
+func (s *statsMgr) Tick() {
+	s.last = time.Now().Unix() + int64(float64(Interval())/1000.0)*2
+}
+
+func (s *statsMgr) polling() {
+	for {
+		if s.last > time.Now().Unix() {
+			runtime.ReadMemStats(memstats.Stats)
+			memstats.T = time.Now().Format(defaultCfg.TimeFormat)
+		}
+		time.Sleep(time.Duration(Interval()) * time.Millisecond)
+	}
+}
+
+var rtStats = newStatsMgr()
 
 func genViewTemplate(vid, route string) string {
 	tpl, err := template.New("view").Parse(defaultCfg.Template)

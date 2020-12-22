@@ -41,12 +41,14 @@ func (vr *GCSizeViewer) View() *charts.Line {
 }
 
 func (vr *GCSizeViewer) Serve(w http.ResponseWriter, _ *http.Request) {
+	rtStats.Tick()
+
 	metrics := Metrics{
 		Values: []float64{
-			fixedPrecision(float64(rtStats.Stats.GCSys)/1024/1024, 2),
-			fixedPrecision(float64(rtStats.Stats.NextGC)/1024/1024, 2),
+			fixedPrecision(float64(memstats.Stats.GCSys)/1024/1024, 2),
+			fixedPrecision(float64(memstats.Stats.NextGC)/1024/1024, 2),
 		},
-		Time: rtStats.T,
+		Time: memstats.T,
 	}
 
 	bs, _ := json.Marshal(metrics)

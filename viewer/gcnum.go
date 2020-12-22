@@ -40,9 +40,11 @@ func (vr *GCNumViewer) View() *charts.Line {
 }
 
 func (vr *GCNumViewer) Serve(w http.ResponseWriter, _ *http.Request) {
+	rtStats.Tick()
+
 	metrics := Metrics{
-		Values: []float64{float64(rtStats.Stats.NumGC)},
-		Time:   rtStats.T,
+		Values: []float64{float64(memstats.Stats.NumGC)},
+		Time:   memstats.T,
 	}
 
 	bs, _ := json.Marshal(metrics)

@@ -26,6 +26,8 @@ $ go get -u github.com/go-echarts/statsview/...
 Statsview is quite simple to use and all static assets have been packaged into the project which makes it possible to run offline. It's worth pointing out that statsview has integrated the standard `net/http/pprof` hence statsview will be the only profiler you need.
 
 ```golang
+package main
+
 import (
     "time"
 
@@ -33,18 +35,16 @@ import (
 )
 
 func main() {
-    go func() {
-        mgr := statsview.New()
+	mgr := statsview.New()
 
-        // Start() runs a HTTP server at `localhost:18066` by default.
-        mgr.Start()
+	// Start() runs a HTTP server at `localhost:18066` by default.
+	go mgr.Start()
 
-        // Stop() will shutdown the http server gracefully
-        // mgr.Stop()
-    }()
+	// Stop() will shutdown the http server gracefully
+	// mgr.Stop()
 
-    // busy working....
-    time.Sleep(time.Minute)
+	// busy working....
+	time.Sleep(time.Minute)
 }
 
 // Visit your browser at http://localhost:18066/debug/statsview
