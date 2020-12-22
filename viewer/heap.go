@@ -46,7 +46,9 @@ func (vr *HeapViewer) View() *charts.Line {
 }
 
 func (vr *HeapViewer) Serve(w http.ResponseWriter, _ *http.Request) {
+
 	vr.smgr.Tick()
+
 
 	metrics := Metrics{
 		Values: []float64{

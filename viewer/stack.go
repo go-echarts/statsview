@@ -48,7 +48,9 @@ func (vr *StackViewer) View() *charts.Line {
 }
 
 func (vr *StackViewer) Serve(w http.ResponseWriter, _ *http.Request) {
+
 	vr.smgr.Tick()
+
 	metrics := Metrics{
 		Values: []float64{
 			fixedPrecision(float64(memstats.Stats.StackSys)/1024/1024, 2),

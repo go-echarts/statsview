@@ -47,6 +47,7 @@ func (vr *GCCPUFractionViewer) View() *charts.Line {
 func (vr *GCCPUFractionViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	vr.smgr.Tick()
 
+
 	metrics := Metrics{
 		Values: []float64{fixedPrecision(memstats.Stats.GCCPUFraction, 6)},
 		Time:   memstats.T,

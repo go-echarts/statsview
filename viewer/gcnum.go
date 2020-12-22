@@ -46,7 +46,6 @@ func (vr *GCNumViewer) View() *charts.Line {
 
 func (vr *GCNumViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	vr.smgr.Tick()
-
 	metrics := Metrics{
 		Values: []float64{float64(memstats.Stats.NumGC)},
 		Time:   memstats.T,

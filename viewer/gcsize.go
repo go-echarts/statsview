@@ -47,7 +47,9 @@ func (vr *GCSizeViewer) View() *charts.Line {
 }
 
 func (vr *GCSizeViewer) Serve(w http.ResponseWriter, _ *http.Request) {
+
 	vr.smgr.Tick()
+
 	metrics := Metrics{
 		Values: []float64{
 			fixedPrecision(float64(memstats.Stats.GCSys)/1024/1024, 2),
