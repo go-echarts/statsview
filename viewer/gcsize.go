@@ -15,6 +15,7 @@ const (
 
 // GCSizeViewer collects the GC size metric via `runtime.ReadMemStats()`
 type GCSizeViewer struct {
+	smgr *StatsMgr
 	graph *charts.Line
 }
 
@@ -32,6 +33,11 @@ func NewGCSizeViewer() Viewer {
 	return &GCSizeViewer{graph: graph}
 }
 
+
+func (vr *GCSizeViewer) SetStatsMgr(smgr *StatsMgr) {
+	vr.smgr = smgr
+}
+
 func (vr *GCSizeViewer) Name() string {
 	return VGCSzie
 }
@@ -41,8 +47,7 @@ func (vr *GCSizeViewer) View() *charts.Line {
 }
 
 func (vr *GCSizeViewer) Serve(w http.ResponseWriter, _ *http.Request) {
-	rtStats.Tick()
-
+	vr.smgr.Tick()
 	metrics := Metrics{
 		Values: []float64{
 			fixedPrecision(float64(memstats.Stats.GCSys)/1024/1024, 2),

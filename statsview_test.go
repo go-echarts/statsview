@@ -1,20 +1,33 @@
 package statsview
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
 
 func TestStatsViewMgr(t *testing.T) {
-	mgr := New()
 
-	timeout := time.After(12 * time.Second)
+	timeout := time.After(30 * time.Second)
 	done := make(chan bool)
 	go func() {
-		go mgr.Start()
+
+		mgr := New()
+		go func() {
+			 mgr.Start()
+
+		}()
 		time.Sleep(10 * time.Second)
 		mgr.Stop()
-		
+
+
+		time.Sleep(5 * time.Second)
+		mgr = New()
+		err := mgr.Start()
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("123")
 		done <- true
 	}()
 

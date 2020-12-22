@@ -15,6 +15,7 @@ const (
 
 // StackViewer collects the stack-stats metrics via `runtime.ReadMemStats()`
 type StackViewer struct {
+	smgr  *StatsMgr
 	graph *charts.Line
 }
 
@@ -34,6 +35,10 @@ func NewStackViewer() Viewer {
 	return &StackViewer{graph: graph}
 }
 
+func (vr *StackViewer) SetStatsMgr(smgr *StatsMgr) {
+	vr.smgr = smgr
+}
+
 func (vr *StackViewer) Name() string {
 	return VCStack
 }
@@ -43,8 +48,7 @@ func (vr *StackViewer) View() *charts.Line {
 }
 
 func (vr *StackViewer) Serve(w http.ResponseWriter, _ *http.Request) {
-	rtStats.Tick()
-
+	vr.smgr.Tick()
 	metrics := Metrics{
 		Values: []float64{
 			fixedPrecision(float64(memstats.Stats.StackSys)/1024/1024, 2),

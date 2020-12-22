@@ -18,13 +18,16 @@ import (
 // ViewManager
 type ViewManager struct {
 	srv *http.Server
-
+	Smgr *viewer.StatsMgr
+	Ctx    context.Context
+	Cancel context.CancelFunc
 	Views []viewer.Viewer
 }
 
 // Register registers views to the ViewManager
 func (vm *ViewManager) Register(views ...viewer.Viewer) {
 	vm.Views = append(vm.Views, views...)
+
 }
 
 // Start runs a http server and begin to collect metrics
@@ -37,8 +40,7 @@ func (vm *ViewManager) Stop() {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 	vm.srv.Shutdown(ctx)
-
-	viewer.Quit <- struct{}{}
+	vm.Cancel()
 }
 
 func init() {
@@ -71,8 +73,9 @@ func New() *ViewManager {
 			WriteTimeout:   time.Minute,
 			MaxHeaderBytes: 1 << 20,
 		},
-	}
 
+	}
+	mgr.Ctx, mgr.Cancel = context.WithCancel(context.Background())
 	mgr.Register(
 		viewer.NewGoroutinesViewer(),
 		viewer.NewHeapViewer(),
@@ -81,6 +84,10 @@ func New() *ViewManager {
 		viewer.NewGCSizeViewer(),
 		viewer.NewGCCPUFractionViewer(),
 	)
+	smgr := viewer.NewStatsMgr(mgr.Ctx)
+	for _,v := range mgr.Views{
+		v.SetStatsMgr(smgr)
+	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/debug/pprof/", pprof.Index)
@@ -118,3 +125,4 @@ func New() *ViewManager {
 	mgr.srv.Handler = cors.AllowAll().Handler(mux)
 	return mgr
 }
+
