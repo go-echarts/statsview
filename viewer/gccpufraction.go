@@ -40,9 +40,11 @@ func (vr *GCCPUFractionViewer) View() *charts.Line {
 }
 
 func (vr *GCCPUFractionViewer) Serve(w http.ResponseWriter, _ *http.Request) {
+	rtStats.Tick()
+
 	metrics := Metrics{
-		Values: []float64{fixedPrecision(rtStats.Stats.GCCPUFraction, 6)},
-		Time:   rtStats.T,
+		Values: []float64{fixedPrecision(memstats.Stats.GCCPUFraction, 6)},
+		Time:   memstats.T,
 	}
 
 	bs, _ := json.Marshal(metrics)

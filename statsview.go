@@ -17,43 +17,28 @@ import (
 
 // ViewManager
 type ViewManager struct {
-	Views []viewer.Viewer
+	srv *http.Server
 
-	srv  *http.Server
-	done chan struct{}
+	Views []viewer.Viewer
 }
 
-// Register registers views to the ViweManager
+// Register registers views to the ViewManager
 func (vm *ViewManager) Register(views ...viewer.Viewer) {
 	vm.Views = append(vm.Views, views...)
 }
 
 // Start runs a http server and begin to collect metrics
-func (vm *ViewManager) Start() {
-	ticker := time.NewTicker(time.Duration(viewer.Interval()) * time.Millisecond)
-
-	go func() {
-		vm.srv.ListenAndServe()
-	}()
-
-	for {
-		select {
-		case <-ticker.C:
-			viewer.StartRTCollect()
-		case <-vm.done:
-			ticker.Stop()
-			return
-		}
-	}
+func (vm *ViewManager) Start() error {
+	return vm.srv.ListenAndServe()
 }
 
 // Stop shutdown the http server gracefully
 func (vm *ViewManager) Stop() {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 	vm.srv.Shutdown(ctx)
-	//stop the starter goroutine
-	vm.done <- struct{}{}
+
+	viewer.Quit <- struct{}{}
 }
 
 func init() {
@@ -80,7 +65,6 @@ func New() *ViewManager {
 	page.Assets.JSAssets.Add("jquery.min.js")
 
 	mgr := &ViewManager{
-		done: make(chan struct{}),
 		srv: &http.Server{
 			Addr:           viewer.Addr(),
 			ReadTimeout:    time.Minute,
