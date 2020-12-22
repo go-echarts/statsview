@@ -172,6 +172,7 @@ type statsEntity struct {
 }
 
 var memstats = &statsEntity{Stats: &runtime.MemStats{}}
+var Quit = make(chan struct{}, 1)
 
 type statsMgr struct {
 	last int64
@@ -189,12 +190,19 @@ func (s *statsMgr) Tick() {
 }
 
 func (s *statsMgr) polling() {
+	ticker := time.NewTicker(time.Duration(Interval()) * time.Millisecond)
+	defer ticker.Stop()
+
 	for {
-		if s.last > time.Now().Unix() {
-			runtime.ReadMemStats(memstats.Stats)
-			memstats.T = time.Now().Format(defaultCfg.TimeFormat)
+		select {
+		case <-ticker.C:
+			if s.last > time.Now().Unix() {
+				runtime.ReadMemStats(memstats.Stats)
+				memstats.T = time.Now().Format(defaultCfg.TimeFormat)
+			}
+		case <-Quit:
+			return
 		}
-		time.Sleep(time.Duration(Interval()) * time.Millisecond)
 	}
 }
 
