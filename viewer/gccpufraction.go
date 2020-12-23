@@ -15,6 +15,7 @@ const (
 
 // GCCPUFractionViewer collects the GC-CPU fraction metric via `runtime.ReadMemStats()`
 type GCCPUFractionViewer struct {
+	smgr  *StatsMgr
 	graph *charts.Line
 }
 
@@ -31,6 +32,10 @@ func NewGCCPUFractionViewer() Viewer {
 	return &GCCPUFractionViewer{graph: graph}
 }
 
+func (vr *GCCPUFractionViewer) SetStatsMgr(smgr *StatsMgr) {
+	vr.smgr = smgr
+}
+
 func (vr *GCCPUFractionViewer) Name() string {
 	return VGCCPUFraction
 }
@@ -40,7 +45,7 @@ func (vr *GCCPUFractionViewer) View() *charts.Line {
 }
 
 func (vr *GCCPUFractionViewer) Serve(w http.ResponseWriter, _ *http.Request) {
-	rtStats.Tick()
+	vr.smgr.Tick()
 
 	metrics := Metrics{
 		Values: []float64{fixedPrecision(memstats.Stats.GCCPUFraction, 6)},

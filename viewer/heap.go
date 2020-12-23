@@ -15,6 +15,7 @@ const (
 
 // HeapViewer collects the heap-stats metrics via `runtime.ReadMemStats()`
 type HeapViewer struct {
+	smgr  *StatsMgr
 	graph *charts.Line
 }
 
@@ -33,7 +34,9 @@ func NewHeapViewer() Viewer {
 
 	return &HeapViewer{graph: graph}
 }
-
+func (vr *HeapViewer) SetStatsMgr(smgr *StatsMgr) {
+	vr.smgr = smgr
+}
 func (vr *HeapViewer) Name() string {
 	return VHeap
 }
@@ -43,7 +46,7 @@ func (vr *HeapViewer) View() *charts.Line {
 }
 
 func (vr *HeapViewer) Serve(w http.ResponseWriter, _ *http.Request) {
-	rtStats.Tick()
+	vr.smgr.Tick()
 
 	metrics := Metrics{
 		Values: []float64{

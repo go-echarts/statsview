@@ -2,6 +2,7 @@ package viewer
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"net/http"
 	"runtime"
@@ -164,6 +165,7 @@ type Viewer interface {
 	Name() string
 	View() *charts.Line
 	Serve(w http.ResponseWriter, _ *http.Request)
+	SetStatsMgr(smgr *StatsMgr)
 }
 
 type statsEntity struct {
@@ -172,24 +174,26 @@ type statsEntity struct {
 }
 
 var memstats = &statsEntity{Stats: &runtime.MemStats{}}
-var Quit = make(chan struct{}, 1)
 
-type statsMgr struct {
-	last int64
+type StatsMgr struct {
+	last   int64
+	Ctx    context.Context
+	Cancel context.CancelFunc
 }
 
-func newStatsMgr() *statsMgr {
-	s := &statsMgr{}
+func NewStatsMgr(ctx context.Context) *StatsMgr {
+	s := &StatsMgr{}
+	s.Ctx, s.Cancel = context.WithCancel(ctx)
 	go s.polling()
 
 	return s
 }
 
-func (s *statsMgr) Tick() {
+func (s *StatsMgr) Tick() {
 	s.last = time.Now().Unix() + int64(float64(Interval())/1000.0)*2
 }
 
-func (s *statsMgr) polling() {
+func (s *StatsMgr) polling() {
 	ticker := time.NewTicker(time.Duration(Interval()) * time.Millisecond)
 	defer ticker.Stop()
 
@@ -200,13 +204,11 @@ func (s *statsMgr) polling() {
 				runtime.ReadMemStats(memstats.Stats)
 				memstats.T = time.Now().Format(defaultCfg.TimeFormat)
 			}
-		case <-Quit:
+		case <-s.Ctx.Done():
 			return
 		}
 	}
 }
-
-var rtStats = newStatsMgr()
 
 func genViewTemplate(vid, route string) string {
 	tpl, err := template.New("view").Parse(defaultCfg.Template)

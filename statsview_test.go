@@ -6,15 +6,22 @@ import (
 )
 
 func TestStatsViewMgr(t *testing.T) {
-	mgr := New()
-
-	timeout := time.After(12 * time.Second)
+	timeout := time.After(time.Minute)
 	done := make(chan bool)
+
 	go func() {
+		mgr := New()
 		go mgr.Start()
 		time.Sleep(10 * time.Second)
 		mgr.Stop()
-		
+
+		time.Sleep(2 * time.Second)
+
+		mgr = New()
+		go mgr.Start()
+		time.Sleep(10 * time.Second)
+		mgr.Stop()
+
 		done <- true
 	}()
 
