@@ -93,7 +93,7 @@ WithTheme(theme Theme)
 
 ```golang
 import (
-	"github.com/go-echarts/statsview"
+    "github.com/go-echarts/statsview"
     "github.com/go-echarts/statsview/viewer"
 )
 
