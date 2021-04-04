@@ -93,11 +93,15 @@ WithTheme(theme Theme)
 
 ```golang
 import (
+	"github.com/go-echarts/statsview"
     "github.com/go-echarts/statsview/viewer"
 )
 
-// set configurations before calling the `Start()` method
+// set configurations before calling `statsview.New()` method
 viewer.SetConfiguration(viewer.WithTheme(viewer.ThemeWesteros), viewer.WithAddr("localhost:8087"))
+
+mgr := statsview.New()
+go mgr.Start()
 ```
 
 ## 🗂 Viewers
