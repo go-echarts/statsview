@@ -1,5 +1,8 @@
 # 🚀 Statsview
 
+cloned from [statsview](https://github.com/go-echarts/statsview).
+
+
 Statsview is a real-time Golang runtime stats visualization profiler. It is built top on another open-source project, [go-echarts](https://github.com/go-echarts/go-echarts), which helps statsview to show its graphs on the browser.
 
 <a href="https://github.com/go-echarts/statsview/pulls">
@@ -18,7 +21,7 @@ Statsview is a real-time Golang runtime stats visualization profiler. It is buil
 ## 🔰 Installation
 
 ```shell
-$ go get -u github.com/go-echarts/statsview/...
+$ go get -u github.com/smallnest/statsview/...
 ```
 
 ## 📝 Usage
@@ -31,7 +34,7 @@ package main
 import (
     "time"
 
-    "github.com/go-echarts/statsview"
+    "github.com/smallnest/statsview"
 )
 
 func main() {
@@ -53,7 +56,7 @@ func main() {
 
 ## ⚙️ Configuration
 
-Statsview gets a variety of configurations for the users. Everyone could customize their favorite charts style.
+Statsview gets a variety of configurations for the users. Everyone could customize their favorite charts style with `viewer.SetConfiguration(...)` method.
 
 ```golang
 // WithInterval sets the interval(in Millisecond) of collecting and pulling metrics
@@ -93,8 +96,8 @@ WithTheme(theme Theme)
 
 ```golang
 import (
-    "github.com/go-echarts/statsview"
-    "github.com/go-echarts/statsview/viewer"
+    "github.com/smallnest/statsview"
+    "github.com/smallnest/statsview/viewer"
 )
 
 // set configurations before calling `statsview.New()` method

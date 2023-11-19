@@ -11,8 +11,8 @@ import (
 	"github.com/go-echarts/go-echarts/v2/templates"
 	"github.com/rs/cors"
 
-	"github.com/go-echarts/statsview/statics"
-	"github.com/go-echarts/statsview/viewer"
+	"github.com/smallnest/statsview/statics"
+	"github.com/smallnest/statsview/viewer"
 )
 
 // ViewManager
