@@ -168,12 +168,18 @@ type Viewer interface {
 	SetStatsMgr(smgr *StatsMgr)
 }
 
-type statsEntity struct {
+// StatsEntity is the entity of the metrics with timestamp.
+type StatsEntity struct {
 	Stats *runtime.MemStats
 	T     string
 }
 
-var memstats = &statsEntity{Stats: &runtime.MemStats{}}
+var memstats = &StatsEntity{Stats: &runtime.MemStats{}}
+
+// MemStats returns the runtime.MemStats and T.
+func MemStats() *StatsEntity {
+	return memstats
+}
 
 type StatsMgr struct {
 	last   int64
