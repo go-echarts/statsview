@@ -76,7 +76,7 @@ function {{ .ViewID }}_sync() {
 	DefaultTheme      = ThemeMacarons
 )
 
-var defaultCfg = &config{
+var DefaultCfg = &config{
 	Interval:   DefaultInterval,
 	MaxPoints:  DefaultMaxPoints,
 	Template:   DefaultTemplate,
@@ -90,17 +90,17 @@ type Option func(c *config)
 
 // Addr returns the default server listening address
 func Addr() string {
-	return defaultCfg.ListenAddr
+	return DefaultCfg.ListenAddr
 }
 
 // LinkAddr returns the default html link address
 func LinkAddr() string {
-	return defaultCfg.LinkAddr
+	return DefaultCfg.LinkAddr
 }
 
 // Interval returns the default collecting interval of ViewManager
 func Interval() int {
-	return defaultCfg.Interval
+	return DefaultCfg.Interval
 }
 
 // WithInterval sets the interval of collecting and pulling metrics
@@ -156,7 +156,7 @@ func WithTheme(theme Theme) Option {
 
 func SetConfiguration(opts ...Option) {
 	for _, opt := range opts {
-		opt(defaultCfg)
+		opt(DefaultCfg)
 	}
 }
 
@@ -202,7 +202,7 @@ func (s *StatsMgr) polling() {
 		case <-ticker.C:
 			if s.last > time.Now().Unix() {
 				runtime.ReadMemStats(memstats.Stats)
-				memstats.T = time.Now().Format(defaultCfg.TimeFormat)
+				memstats.T = time.Now().Format(DefaultCfg.TimeFormat)
 			}
 		case <-s.Ctx.Done():
 			return
@@ -211,7 +211,7 @@ func (s *StatsMgr) polling() {
 }
 
 func genViewTemplate(vid, route string) string {
-	tpl, err := template.New("view").Parse(defaultCfg.Template)
+	tpl, err := template.New("view").Parse(DefaultCfg.Template)
 	if err != nil {
 		panic("statsview: failed to parse template " + err.Error())
 	}
@@ -223,9 +223,9 @@ func genViewTemplate(vid, route string) string {
 		Route     string
 		ViewID    string
 	}{
-		Interval:  defaultCfg.Interval,
-		MaxPoints: defaultCfg.MaxPoints,
-		Addr:      defaultCfg.LinkAddr,
+		Interval:  DefaultCfg.Interval,
+		MaxPoints: DefaultCfg.MaxPoints,
+		Addr:      DefaultCfg.LinkAddr,
 		Route:     route,
 		ViewID:    vid,
 	}
@@ -238,7 +238,8 @@ func genViewTemplate(vid, route string) string {
 	return buf.String()
 }
 
-func fixedPrecision(n float64, p int) float64 {
+// FixedPrecision returns the fixed precision float64
+func FixedPrecision(n float64, p int) float64 {
 	var r float64
 	switch p {
 	case 2:
@@ -249,7 +250,8 @@ func fixedPrecision(n float64, p int) float64 {
 	return r
 }
 
-func newBasicView(route string) *charts.Line {
+// NewBasicView returns a basic line-chart with default configurations
+func NewBasicView(route string) *charts.Line {
 	graph := charts.NewLine()
 	graph.SetGlobalOptions(
 		charts.WithLegendOpts(opts.Legend{Show: true}),
@@ -258,7 +260,7 @@ func newBasicView(route string) *charts.Line {
 		charts.WithInitializationOpts(opts.Initialization{
 			Width:  "600px",
 			Height: "400px",
-			Theme:  string(defaultCfg.Theme),
+			Theme:  string(DefaultCfg.Theme),
 		}),
 	)
 	graph.SetXAxis([]string{}).SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: true}))

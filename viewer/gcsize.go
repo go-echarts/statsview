@@ -22,7 +22,7 @@ type GCSizeViewer struct {
 // NewGCSizeViewer returns the GCSizeViewer instance
 // Series: GCSys / NextGC
 func NewGCSizeViewer() Viewer {
-	graph := newBasicView(VGCSize)
+	graph := NewBasicView(VGCSize)
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "GC Size"}),
 		charts.WithYAxisOpts(opts.YAxis{Name: "Size", AxisLabel: &opts.AxisLabel{Show: true, Formatter: "{value} MB"}}),
@@ -50,8 +50,8 @@ func (vr *GCSizeViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 
 	metrics := Metrics{
 		Values: []float64{
-			fixedPrecision(float64(memstats.Stats.GCSys)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.NextGC)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.GCSys)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.NextGC)/1024/1024, 2),
 		},
 		Time: memstats.T,
 	}

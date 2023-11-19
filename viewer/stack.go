@@ -22,7 +22,7 @@ type StackViewer struct {
 // NewStackViewer returns the StackViewer instance
 // Series: StackSys / StackInuse / MSpanSys / MSpanInuse
 func NewStackViewer() Viewer {
-	graph := newBasicView(VCStack)
+	graph := NewBasicView(VCStack)
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "Stack"}),
 		charts.WithYAxisOpts(opts.YAxis{Name: "Size", AxisLabel: &opts.AxisLabel{Show: true, Formatter: "{value} MB"}}),
@@ -52,10 +52,10 @@ func (vr *StackViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 
 	metrics := Metrics{
 		Values: []float64{
-			fixedPrecision(float64(memstats.Stats.StackSys)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.StackInuse)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.MSpanSys)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.MSpanInuse)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.StackSys)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.StackInuse)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.MSpanSys)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.MSpanInuse)/1024/1024, 2),
 		},
 		Time: memstats.T,
 	}

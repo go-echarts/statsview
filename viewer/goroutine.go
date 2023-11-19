@@ -25,7 +25,7 @@ type GoroutinesViewer struct {
 // NewGoroutinesViewer returns the GoroutinesViewer instance
 // Series: Goroutines
 func NewGoroutinesViewer() Viewer {
-	graph := newBasicView(VGoroutine)
+	graph := NewBasicView(VGoroutine)
 	graph.SetGlobalOptions(
 		charts.WithYAxisOpts(opts.YAxis{Name: "Num"}),
 		charts.WithTitleOpts(opts.Title{Title: "Goroutines"}),
@@ -62,7 +62,7 @@ func (vr *GoroutinesViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 			float64(runtime.NumCPU()),
 			float64(runtime.GOMAXPROCS(0)),
 		},
-		Time: time.Now().Format(defaultCfg.TimeFormat),
+		Time: time.Now().Format(DefaultCfg.TimeFormat),
 	}
 
 	bs, _ := json.Marshal(metrics)

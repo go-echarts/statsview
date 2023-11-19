@@ -22,7 +22,7 @@ type GCNumViewer struct {
 // NewGCNumViewer returns the GCNumViewer instance
 // Series: GcNum
 func NewGCNumViewer() Viewer {
-	graph := newBasicView(VGCNum)
+	graph := NewBasicView(VGCNum)
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "GC Number"}),
 		charts.WithYAxisOpts(opts.YAxis{Name: "Num"}),

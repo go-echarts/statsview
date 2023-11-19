@@ -22,7 +22,7 @@ type HeapViewer struct {
 // NewHeapViewer returns the HeapViewer instance
 // Series: Alloc / Inuse / Sys / Idle
 func NewHeapViewer() Viewer {
-	graph := newBasicView(VHeap)
+	graph := NewBasicView(VHeap)
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "Heap"}),
 		charts.WithYAxisOpts(opts.YAxis{Name: "Size", AxisLabel: &opts.AxisLabel{Show: true, Formatter: "{value} MB"}}),
@@ -50,10 +50,10 @@ func (vr *HeapViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 
 	metrics := Metrics{
 		Values: []float64{
-			fixedPrecision(float64(memstats.Stats.HeapAlloc)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.HeapInuse)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.HeapSys)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.HeapIdle)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.HeapAlloc)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.HeapInuse)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.HeapSys)/1024/1024, 2),
+			FixedPrecision(float64(memstats.Stats.HeapIdle)/1024/1024, 2),
 		},
 		Time: memstats.T,
 	}

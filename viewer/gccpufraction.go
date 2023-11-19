@@ -22,7 +22,7 @@ type GCCPUFractionViewer struct {
 // NewGCCPUFractionViewer returns the GCCPUFractionViewer instance
 // Series: Fraction
 func NewGCCPUFractionViewer() Viewer {
-	graph := newBasicView(VGCCPUFraction)
+	graph := NewBasicView(VGCCPUFraction)
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "GC CPUFraction"}),
 		charts.WithYAxisOpts(opts.YAxis{Name: "Percent", AxisLabel: &opts.AxisLabel{Show: true, Formatter: "{value} %", Rotate: 35}}),
@@ -48,7 +48,7 @@ func (vr *GCCPUFractionViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	vr.smgr.Tick()
 
 	metrics := Metrics{
-		Values: []float64{fixedPrecision(memstats.Stats.GCCPUFraction, 6)},
+		Values: []float64{FixedPrecision(memstats.Stats.GCCPUFraction, 6)},
 		Time:   memstats.T,
 	}
 
