@@ -25,7 +25,7 @@ func NewHeapViewer() Viewer {
 	graph := newBasicView(VHeap)
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "Heap"}),
-		charts.WithYAxisOpts(opts.YAxis{Name: "Size", AxisLabel: &opts.AxisLabel{Formatter: "{value} MB"}}),
+		charts.WithYAxisOpts(opts.YAxis{Name: "Size", AxisLabel: &opts.AxisLabel{Show: true, Formatter: "{value} MB"}}),
 	)
 	graph.AddSeries("Alloc", []opts.LineData{}).
 		AddSeries("Inuse", []opts.LineData{}).

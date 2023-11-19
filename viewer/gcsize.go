@@ -25,7 +25,7 @@ func NewGCSizeViewer() Viewer {
 	graph := newBasicView(VGCSize)
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "GC Size"}),
-		charts.WithYAxisOpts(opts.YAxis{Name: "Size", AxisLabel: &opts.AxisLabel{Formatter: "{value} MB"}}),
+		charts.WithYAxisOpts(opts.YAxis{Name: "Size", AxisLabel: &opts.AxisLabel{Show: true, Formatter: "{value} MB"}}),
 	)
 	graph.AddSeries("GCSys", []opts.LineData{}).
 		AddSeries("NextGC", []opts.LineData{})

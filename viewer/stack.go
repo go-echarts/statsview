@@ -25,7 +25,7 @@ func NewStackViewer() Viewer {
 	graph := newBasicView(VCStack)
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "Stack"}),
-		charts.WithYAxisOpts(opts.YAxis{Name: "Size", AxisLabel: &opts.AxisLabel{Formatter: "{value} MB"}}),
+		charts.WithYAxisOpts(opts.YAxis{Name: "Size", AxisLabel: &opts.AxisLabel{Show: true, Formatter: "{value} MB"}}),
 	)
 	graph.AddSeries("Sys", []opts.LineData{}).
 		AddSeries("Inuse", []opts.LineData{}).
