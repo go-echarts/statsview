@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"runtime"
 	"strconv"
+	"sync/atomic"
 	"text/template"
 	"time"
 
@@ -176,21 +177,25 @@ type statsEntity struct {
 var memstats = &statsEntity{Stats: &runtime.MemStats{}}
 
 type StatsMgr struct {
-	last   int64
-	Ctx    context.Context
-	Cancel context.CancelFunc
+	last   atomic.Int64
+	ctx    context.Context
+	cancel context.CancelFunc
 }
 
 func NewStatsMgr(ctx context.Context) *StatsMgr {
 	s := &StatsMgr{}
-	s.Ctx, s.Cancel = context.WithCancel(ctx)
+	s.ctx, s.cancel = context.WithCancel(ctx)
 	go s.polling()
 
 	return s
 }
 
 func (s *StatsMgr) Tick() {
-	s.last = time.Now().Unix() + int64(float64(Interval())/1000.0)*2
+	s.last.Store(time.Now().Unix() + int64(float64(Interval())/1000.0)*2)
+}
+
+func (s *StatsMgr) Close() {
+	s.cancel()
 }
 
 func (s *StatsMgr) polling() {
@@ -200,11 +205,11 @@ func (s *StatsMgr) polling() {
 	for {
 		select {
 		case <-ticker.C:
-			if s.last > time.Now().Unix() {
+			if s.last.Load() > time.Now().Unix() {
 				runtime.ReadMemStats(memstats.Stats)
 				memstats.T = time.Now().Format(defaultCfg.TimeFormat)
 			}
-		case <-s.Ctx.Done():
+		case <-s.ctx.Done():
 			return
 		}
 	}
@@ -261,7 +266,9 @@ func newBasicView(route string) *charts.Line {
 			Theme:  string(defaultCfg.Theme),
 		}),
 	)
-	graph.SetXAxis([]string{}).SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: opts.Bool(true)}))
+	graph.SetXAxis([]string{}).SetSeriesOptions(
+		charts.WithLineChartOpts(opts.LineChart{Smooth: opts.Bool(true)}),
+	)
 	graph.AddJSFuncs(genViewTemplate(graph.ChartID, route))
 	return graph
 }
