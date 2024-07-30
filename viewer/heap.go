@@ -34,9 +34,11 @@ func NewHeapViewer() Viewer {
 
 	return &HeapViewer{graph: graph}
 }
+
 func (vr *HeapViewer) SetStatsMgr(smgr *StatsMgr) {
 	vr.smgr = smgr
 }
+
 func (vr *HeapViewer) Name() string {
 	return VHeap
 }

@@ -216,7 +216,7 @@ func genViewTemplate(vid, route string) string {
 		panic("statsview: failed to parse template " + err.Error())
 	}
 
-	var c = struct {
+	c := struct {
 		Interval  int
 		MaxPoints int
 		Addr      string
@@ -252,8 +252,8 @@ func fixedPrecision(n float64, p int) float64 {
 func newBasicView(route string) *charts.Line {
 	graph := charts.NewLine()
 	graph.SetGlobalOptions(
-		charts.WithLegendOpts(opts.Legend{Show: true}),
-		charts.WithTooltipOpts(opts.Tooltip{Show: true, Trigger: "axis"}),
+		charts.WithLegendOpts(opts.Legend{Show: opts.Bool(true)}),
+		charts.WithTooltipOpts(opts.Tooltip{Show: opts.Bool(true), Trigger: "axis"}),
 		charts.WithXAxisOpts(opts.XAxis{Name: "Time"}),
 		charts.WithInitializationOpts(opts.Initialization{
 			Width:  "600px",
@@ -261,7 +261,7 @@ func newBasicView(route string) *charts.Line {
 			Theme:  string(defaultCfg.Theme),
 		}),
 	)
-	graph.SetXAxis([]string{}).SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: true}))
+	graph.SetXAxis([]string{}).SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: opts.Bool(true)}))
 	graph.AddJSFuncs(genViewTemplate(graph.ChartID, route))
 	return graph
 }

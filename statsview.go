@@ -28,7 +28,6 @@ type ViewManager struct {
 // Register registers views to the ViewManager
 func (vm *ViewManager) Register(views ...viewer.Viewer) {
 	vm.Views = append(vm.Views, views...)
-
 }
 
 // Start runs a http server and begin to collect metrics
