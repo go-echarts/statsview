@@ -13,7 +13,7 @@ const (
 	VHeap = "heap"
 )
 
-// HeapViewer collects the heap-Stats metrics via `runtime.ReadMemStats()`
+// HeapViewer collects the heap-stats metrics via `runtime.ReadMemStats()`
 type HeapViewer struct {
 	smgr  *StatsMgr
 	graph *charts.Line

@@ -13,7 +13,7 @@ const (
 	VCStack = "stack"
 )
 
-// StackViewer collects the stack-Stats metrics via `runtime.ReadMemStats()`
+// StackViewer collects the stack-stats metrics via `runtime.ReadMemStats()`
 type StackViewer struct {
 	smgr  *StatsMgr
 	graph *charts.Line

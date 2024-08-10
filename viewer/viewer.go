@@ -118,7 +118,7 @@ func WithMaxPoints(n int) Option {
 	}
 }
 
-// WithTemplate sets the rendered template which fetching Stats from the server and
+// WithTemplate sets the rendered template which fetching stats from the server and
 // handling the metrics data
 func WithTemplate(t string) Option {
 	return func(c *config) {
@@ -168,19 +168,6 @@ type Viewer interface {
 	Serve(w http.ResponseWriter, _ *http.Request)
 	SetStatsMgr(smgr *StatsMgr)
 }
-
-//type statsEntity struct {
-//	mut   sync.Mutex
-//	stats runtime.MemStats
-//	ts    string
-//}
-//
-//var statsEntityMut sync.Mutex
-//var innerStatsEntity = &statsEntity{}
-//
-//func getStatsEntity() statsEntity {
-//
-//}
 
 type StatsMgr struct {
 	last   atomic.Int64
