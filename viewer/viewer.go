@@ -118,7 +118,7 @@ func WithMaxPoints(n int) Option {
 	}
 }
 
-// WithTemplate sets the rendered template which fetching stats from the server and
+// WithTemplate sets the rendered template which fetching Stats from the server and
 // handling the metrics data
 func WithTemplate(t string) Option {
 	return func(c *config) {
@@ -169,12 +169,18 @@ type Viewer interface {
 	SetStatsMgr(smgr *StatsMgr)
 }
 
-type statsEntity struct {
-	Stats *runtime.MemStats
-	T     string
-}
-
-var memstats = &statsEntity{Stats: &runtime.MemStats{}}
+//type statsEntity struct {
+//	mut   sync.Mutex
+//	stats runtime.MemStats
+//	ts    string
+//}
+//
+//var statsEntityMut sync.Mutex
+//var innerStatsEntity = &statsEntity{}
+//
+//func getStatsEntity() statsEntity {
+//
+//}
 
 type StatsMgr struct {
 	last   atomic.Int64
@@ -205,9 +211,12 @@ func (s *StatsMgr) polling() {
 	for {
 		select {
 		case <-ticker.C:
+			newStats := &runtime.MemStats{}
 			if s.last.Load() > time.Now().Unix() {
-				runtime.ReadMemStats(memstats.Stats)
-				memstats.T = time.Now().Format(defaultCfg.TimeFormat)
+				runtime.ReadMemStats(newStats)
+				entity := &statsEntity{stats: *newStats}
+				entity.ts = time.Now().Format(defaultCfg.TimeFormat)
+				updateStatsEntity(entity)
 			}
 		case <-s.ctx.Done():
 			return

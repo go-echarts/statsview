@@ -17,17 +17,16 @@ import (
 
 // ViewManager
 type ViewManager struct {
-	srv *http.Server
-
-	Smgr   *viewer.StatsMgr
-	Ctx    context.Context
-	Cancel context.CancelFunc
-	Views  []viewer.Viewer
+	ctx    context.Context
+	cancel context.CancelFunc
+	srv    *http.Server
+	smgr   *viewer.StatsMgr
+	views  []viewer.Viewer
 }
 
 // Register registers views to the ViewManager
 func (vm *ViewManager) Register(views ...viewer.Viewer) {
-	vm.Views = append(vm.Views, views...)
+	vm.views = append(vm.views, views...)
 }
 
 // Start runs a http server and begin to collect metrics
@@ -39,8 +38,9 @@ func (vm *ViewManager) Start() error {
 func (vm *ViewManager) Stop() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
+
 	vm.srv.Shutdown(ctx)
-	vm.Cancel()
+	vm.cancel()
 }
 
 func init() {
@@ -74,7 +74,7 @@ func New() *ViewManager {
 			MaxHeaderBytes: 1 << 20,
 		},
 	}
-	mgr.Ctx, mgr.Cancel = context.WithCancel(context.Background())
+	mgr.ctx, mgr.cancel = context.WithCancel(context.Background())
 	mgr.Register(
 		viewer.NewGoroutinesViewer(),
 		viewer.NewHeapViewer(),
@@ -83,8 +83,8 @@ func New() *ViewManager {
 		viewer.NewGCSizeViewer(),
 		viewer.NewGCCPUFractionViewer(),
 	)
-	smgr := viewer.NewStatsMgr(mgr.Ctx)
-	for _, v := range mgr.Views {
+	smgr := viewer.NewStatsMgr(mgr.ctx)
+	for _, v := range mgr.views {
 		v.SetStatsMgr(smgr)
 	}
 
@@ -95,7 +95,7 @@ func New() *ViewManager {
 	mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
 	mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 
-	for _, v := range mgr.Views {
+	for _, v := range mgr.views {
 		page.AddCharts(v.View())
 		mux.HandleFunc("/debug/statsview/view/"+v.Name(), v.Serve)
 	}
@@ -104,20 +104,22 @@ func New() *ViewManager {
 		page.Render(w)
 	})
 
-	staticsPrev := "/debug/statsview/statics/"
-	mux.HandleFunc(staticsPrev+"echarts.min.js", func(w http.ResponseWriter, _ *http.Request) {
+	staticsRoute := func(s string) string {
+		return "/debug/statsview/statics/" + s
+	}
+	mux.HandleFunc(staticsRoute("echarts.min.js"), func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte(statics.EchartJS))
 	})
 
-	mux.HandleFunc(staticsPrev+"jquery.min.js", func(w http.ResponseWriter, _ *http.Request) {
+	mux.HandleFunc(staticsRoute("jquery.min.js"), func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte(statics.JqueryJS))
 	})
 
-	mux.HandleFunc(staticsPrev+"themes/westeros.js", func(w http.ResponseWriter, _ *http.Request) {
+	mux.HandleFunc(staticsRoute("themes/westeros.js"), func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte(statics.WesterosJS))
 	})
 
-	mux.HandleFunc(staticsPrev+"themes/macarons.js", func(w http.ResponseWriter, _ *http.Request) {
+	mux.HandleFunc(staticsRoute("themes/macarons.js"), func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte(statics.MacaronsJS))
 	})
 

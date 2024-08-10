@@ -47,9 +47,10 @@ func (vr *GCCPUFractionViewer) View() *charts.Line {
 func (vr *GCCPUFractionViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	vr.smgr.Tick()
 
+	entity := getStatsEntity()
 	metrics := Metrics{
-		Values: []float64{fixedPrecision(memstats.Stats.GCCPUFraction, 6)},
-		Time:   memstats.T,
+		Values: []float64{fixedPrecision(entity.stats.GCCPUFraction, 6)},
+		Time:   entity.ts,
 	}
 
 	bs, _ := json.Marshal(metrics)

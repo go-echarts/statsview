@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	// VGCSzie is the name of GCSizeViewer
+	// VGCSize is the name of GCSizeViewer
 	VGCSize = "gcsize"
 )
 
@@ -48,12 +48,13 @@ func (vr *GCSizeViewer) View() *charts.Line {
 func (vr *GCSizeViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	vr.smgr.Tick()
 
+	entity := getStatsEntity()
 	metrics := Metrics{
 		Values: []float64{
-			fixedPrecision(float64(memstats.Stats.GCSys)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.NextGC)/1024/1024, 2),
+			fixedPrecision(unitMB(entity.stats.GCSys), 2),
+			fixedPrecision(unitMB(entity.stats.NextGC), 2),
 		},
-		Time: memstats.T,
+		Time: entity.ts,
 	}
 
 	bs, _ := json.Marshal(metrics)

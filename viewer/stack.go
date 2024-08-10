@@ -13,7 +13,7 @@ const (
 	VCStack = "stack"
 )
 
-// StackViewer collects the stack-stats metrics via `runtime.ReadMemStats()`
+// StackViewer collects the stack-Stats metrics via `runtime.ReadMemStats()`
 type StackViewer struct {
 	smgr  *StatsMgr
 	graph *charts.Line
@@ -50,14 +50,15 @@ func (vr *StackViewer) View() *charts.Line {
 func (vr *StackViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	vr.smgr.Tick()
 
+	entity := getStatsEntity()
 	metrics := Metrics{
 		Values: []float64{
-			fixedPrecision(float64(memstats.Stats.StackSys)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.StackInuse)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.MSpanSys)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.MSpanInuse)/1024/1024, 2),
+			fixedPrecision(unitMB(entity.stats.StackSys), 2),
+			fixedPrecision(unitMB(entity.stats.StackInuse), 2),
+			fixedPrecision(unitMB(entity.stats.MSpanSys), 2),
+			fixedPrecision(unitMB(entity.stats.MSpanInuse), 2),
 		},
-		Time: memstats.T,
+		Time: entity.ts,
 	}
 
 	bs, _ := json.Marshal(metrics)

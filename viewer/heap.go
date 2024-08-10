@@ -13,7 +13,7 @@ const (
 	VHeap = "heap"
 )
 
-// HeapViewer collects the heap-stats metrics via `runtime.ReadMemStats()`
+// HeapViewer collects the heap-Stats metrics via `runtime.ReadMemStats()`
 type HeapViewer struct {
 	smgr  *StatsMgr
 	graph *charts.Line
@@ -50,14 +50,15 @@ func (vr *HeapViewer) View() *charts.Line {
 func (vr *HeapViewer) Serve(w http.ResponseWriter, _ *http.Request) {
 	vr.smgr.Tick()
 
+	entity := getStatsEntity()
 	metrics := Metrics{
 		Values: []float64{
-			fixedPrecision(float64(memstats.Stats.HeapAlloc)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.HeapInuse)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.HeapSys)/1024/1024, 2),
-			fixedPrecision(float64(memstats.Stats.HeapIdle)/1024/1024, 2),
+			fixedPrecision(unitMB(entity.stats.HeapAlloc), 2),
+			fixedPrecision(unitMB(entity.stats.HeapInuse), 2),
+			fixedPrecision(unitMB(entity.stats.HeapSys), 2),
+			fixedPrecision(unitMB(entity.stats.HeapIdle), 2),
 		},
-		Time: memstats.T,
+		Time: entity.ts,
 	}
 
 	bs, _ := json.Marshal(metrics)
